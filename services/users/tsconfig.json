@@ -4,7 +4,8 @@
     "module": "commonjs",
     "outDir": "dist",
     "sourceMap": true,
-    "types": ["node"]
+    "types": ["node"],
+    "strict": true
   },
   "files": [
     "./node_modules/@types/node/index.d.ts"

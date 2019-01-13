@@ -1,10 +1,19 @@
-import app from './App'
+import app from "./App";
 
-const port = process.env.PORT || '3002'
+class Server {
+  public port: string;
 
-app.listen(port, err => {
-  if (err) {
-    return console.log(err)
+  constructor() {
+    this.port = process.env.PORT || "3002";
+    this.listen()
   }
-  return console.log(`server listening on ${port}`)
-})
+
+  private listen(): void {
+    
+    app.listen(this.port, () => {
+      console.log(`listening on port ${this.port}`)
+    })
+  }
+}
+
+new Server()

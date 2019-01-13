@@ -1,11 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const App_1 = require("./App");
-const port = process.env.PORT || '3002';
-App_1.default.listen(port, err => {
-    if (err) {
-        return console.log(err);
+class Server {
+    constructor() {
+        this.port = process.env.PORT || "3002";
+        this.listen();
     }
-    return console.log(`server listening on ${port}`);
-});
+    listen() {
+        App_1.default.listen(this.port, () => {
+            console.log(`listening on port ${this.port}`);
+        });
+    }
+}
+new Server();
 //# sourceMappingURL=index.js.map
