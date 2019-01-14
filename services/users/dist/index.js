@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const App_1 = require("./App");
 class Server {
     constructor() {
-        this.port = process.env.PORT || "3002";
+        this.port = process.env.PORT || "3000";
         this.listen();
     }
     listen() {
@@ -12,5 +12,5 @@ class Server {
         });
     }
 }
-new Server();
+exports.default = new Server();
 //# sourceMappingURL=index.js.map

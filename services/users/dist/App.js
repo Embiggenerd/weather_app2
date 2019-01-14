@@ -15,6 +15,7 @@ class App {
         this.configureParsers();
         this.mountRoutes();
         this.setup404();
+        this.setupErrors();
     }
     mountRoutes() {
         this.routes.route(this.express);
@@ -42,6 +43,15 @@ class App {
             const err = new Error("Not Found");
             err.status = 404;
             next(err);
+        });
+    }
+    setupErrors() {
+        this.express.use((err, req, res, next) => {
+            res.status(err.status || 500);
+            res.json({
+                status: "error",
+                message: err
+            });
         });
     }
 }

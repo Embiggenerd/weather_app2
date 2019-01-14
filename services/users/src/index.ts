@@ -4,7 +4,7 @@ class Server {
   public port: string;
 
   constructor() {
-    this.port = process.env.PORT || "3002";
+    this.port = process.env.PORT || "3000";
     this.listen()
   }
 
@@ -16,4 +16,4 @@ class Server {
   }
 }
 
-new Server()
+export default new Server()

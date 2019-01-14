@@ -4,9 +4,10 @@
     "module": "commonjs",
     "outDir": "dist",
     "sourceMap": true,
-    "types": ["node"],
-    "strict": true
+    "types": ["node", "mocha"],
+    "strict": true,
   },
+
   "files": [
     "./node_modules/@types/node/index.d.ts"
   ],
@@ -14,7 +15,8 @@
     "src/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "tests"
   ]
   
 }

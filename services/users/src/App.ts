@@ -25,6 +25,7 @@ class App {
     this.configureParsers();
     this.mountRoutes();
     this.setup404();
+    this.setupErrors()
   }
 
   private mountRoutes(): void {
@@ -64,6 +65,16 @@ class App {
         next(err);
       }
     );
+  }
+
+  private setupErrors(): void {
+    this.express.use((err: ErrorWithStatus, req: Request, res: Response, next: NextFunction): void => {
+      res.status(err.status || 500)
+      res.json({
+        status: "error",
+        message: err
+      })
+    })
   }
 }
 
