@@ -18,7 +18,10 @@ services:
     build: ./services/users/
     volumes:
       - './services/users:/src/app'
-      - './services/users/package.json:/src/package.json'
+    #   - './services/users/package.json:/src/package.json'
+      - /src/app/dist/
+      - /src/app/node_modules/
+      
     ports:
       - '3000:3000'
     environment:
