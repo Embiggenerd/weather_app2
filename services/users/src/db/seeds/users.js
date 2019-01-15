@@ -5,7 +5,7 @@ exports.seed = function(knex, Promise) {
   return knex("users")
     .del()
     .then(function() {
-      const salt = bcrypt.getSaltSing();
+      const salt = bcrypt.genSaltSync();
       const hash = bcrypt.hashSync("lala", salt);
       // Inserts seed entries
       return knex("users").insert([
