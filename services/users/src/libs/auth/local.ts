@@ -3,14 +3,41 @@ import * as jwt from "jwt-simple";
 
 import { KnexUser, Token } from "../types"
 
-class Local {
-  private secret: string
+// class Local {
+//   private secret: string
 
-  constructor() {
-    this.secret = process.env.TOKEN_SECRET || "changeme"
-  }
+//   constructor() {
+//     this.secret = process.env.TOKEN_SECRET || "changeme"
+//   }
 
-  public encodeToken(user: KnexUser) {
+//   public encodeToken(user: KnexUser) {
+//     const payload = {
+//       exp: moment()
+//         .add(14, "days")
+//         .unix(),
+//       iat: moment().unix(),
+//       sub: user.id
+//     };
+//     return jwt.encode(payload, this.secret);
+//   }
+
+//   public decodeToken(token: Token, callback: Function) {
+//     const payload = jwt.decode(token, this.secret);
+//     const now = moment().unix();
+//     // check if the token has expired
+//     if (now > payload.exp) callback("Token has expired.");
+//     else callback(null, payload);
+//   }
+// }
+
+
+  let secret: string = process.env.TOKEN_SECRET || "changeme"
+
+  // constructor() {
+  //   this.secret = process.env.TOKEN_SECRET || "changeme"
+  // }
+
+  function encodeToken(user: KnexUser) {
     const payload = {
       exp: moment()
         .add(14, "days")
@@ -18,16 +45,20 @@ class Local {
       iat: moment().unix(),
       sub: user.id
     };
-    return jwt.encode(payload, this.secret);
+    return jwt.encode(payload, secret);
   }
 
-  public decodeToken(token: Token, callback: Function) {
-    const payload = jwt.decode(token, this.secret);
+  function decodeToken(token: Token, callback: Function) {
+    const payload = jwt.decode(token, secret);
     const now = moment().unix();
     // check if the token has expired
     if (now > payload.exp) callback("Token has expired.");
     else callback(null, payload);
   }
-}
 
-export default new Local()
+
+
+export {
+  encodeToken,
+  decodeToken
+}
