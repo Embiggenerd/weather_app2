@@ -1,5 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ping = require("./ping");
-exports.register = require("./register");
+exports.helpers = require("./helpers");
+exports.local = require("./local");
 //# sourceMappingURL=index.js.map

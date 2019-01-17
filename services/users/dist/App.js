@@ -4,6 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
+// hello there
 // import { ping } from "./libs/controllers";
 const routes_1 = require("./libs/routes");
 class App {
