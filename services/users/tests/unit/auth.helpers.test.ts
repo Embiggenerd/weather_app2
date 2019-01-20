@@ -2,27 +2,11 @@ process.env.NODE_ENV = "test";
 
 import * as chai from "chai";
 const should = chai.should();
-const {genSaltSync, hashSync, } = require("bcryptjs");
+const { genSaltSync, hashSync } = require("bcryptjs");
 
+import { authHelpers } from "../../src/libs/auth";
 
-// const helpers = require("../../src/libs/auth/helpers");
-// const { comparePass, createUser, getUser } = helpers
-// const authHelpers = new helpers()
-
-import { authHelpers }  from "../../src/libs/auth"
-
-const { comparePass, getUser, createUser} = authHelpers
-
-// const { encodeToken, decodeToken } = localAuth
-
-
-// console.log('Helpers', Helpers)
-// const authHelpers = Helpers
-
-console.log("authHelpers", authHelpers)
-console.log("comparePass", comparePass)
-console.log("getUser", getUser)
-console.log("createUser", createUser)
+const { comparePass, getUser, createUser } = authHelpers;
 
 describe("auth : helpers", () => {
   describe("comparePass()", () => {
