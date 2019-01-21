@@ -1,4 +1,4 @@
-version: '2.1'
+version: '3'
 
 services:
 
@@ -13,24 +13,37 @@ services:
     healthcheck:
       test: exit 0
 
-  users-service:
-    container_name: users-service
+  users-transpiler:
     build: ./services/users/
     volumes:
-      - './services/users:/src/app'
-    #   - './services/users/package.json:/src/package.json'
-      - /src/app/dist/
-      - /src/app/node_modules/
-      
+      - "users:/users"
+    command: tsc -w --outDir dist/ ./src/
+
+  users-service:
+    container_name: users-service
+    build: ./services/users
+    volumes:
+      - "users:/users"
     ports:
-      - '3000:3000'
+      - '3001:3000'
     environment:
       - DATABASE_URL=postgres://admin:admin@users-db:5432/node_docker_api_users_dev
       - DATABASE_TEST_URL=postgres://admin:admin@users-db:5432/node_docker_api_users_test
       - NODE_ENV=${NODE_ENV}
       - TOKEN_SECRET=changeme
     depends_on:
-      users-db:
-        condition: service_healthy
+      - users-db
     links:
       - users-db
+    command: nodemon dist/index.js -w dist/
+
+  users-data:
+    build: ./services/users
+    volumes:
+      - "users:/users"
+      - /users/dist
+      - /users/node_volumes
+    command: npm install
+
+  volumes:
+    - users: ./services/users

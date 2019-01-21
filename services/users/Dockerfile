@@ -1,18 +1,13 @@
 FROM node:latest
 
 # set working directory
-RUN mkdir -p /src/app
-WORKDIR /src/app
+RUN mkdir -p /users/src
+WORKDIR /users
 
 # install app dependencies
-# ENV PATH /src/node_modules/.bin:$PATH
-# ADD package.json package.json
-COPY . .
-RUN npm install
+RUN npm install -g nodemon typescript
 
-# compile ts to js
-# RUN npm install -g typescript
-RUN npm run build
+# copy package to be installed in compose file
+COPY ./package.json .
 
-# start app
-CMD ["node", "dist/index.js"]
+# calling node etc will happen in compose file
