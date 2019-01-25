@@ -1,12 +1,11 @@
-version: '3'
+version: "2.1"
 
 services:
 
   users-db:
-    container_name: users-db
     build: ./services/users/src/db
     ports:
-      - '5433:5432'
+      - "5433:5432"
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
@@ -15,17 +14,18 @@ services:
 
   users-transpiler:
     build: ./services/users/
-    volumes:
-      - "users:/users"
-    command: tsc -w --outDir dist/ ./src/
+    volumes_from:
+      - users-data
+    depends_on:
+      - users-data
+    command: tsc --watch
 
   users-service:
-    container_name: users-service
     build: ./services/users
-    volumes:
-      - "users:/users"
+    volumes_from:
+      - users-data
     ports:
-      - '3001:3000'
+      - "3001:3000"
     environment:
       - DATABASE_URL=postgres://admin:admin@users-db:5432/node_docker_api_users_dev
       - DATABASE_TEST_URL=postgres://admin:admin@users-db:5432/node_docker_api_users_test
@@ -33,17 +33,20 @@ services:
       - TOKEN_SECRET=changeme
     depends_on:
       - users-db
+      - users-transpiler
     links:
       - users-db
-    command: nodemon dist/index.js -w dist/
+    healthcheck:
+      interval: 1m30s
+      test: exit 0
+    command: nodemon --watch dist
 
   users-data:
     build: ./services/users
     volumes:
-      - "users:/users"
+      - ./services/users:/users
       - /users/dist
-      - /users/node_volumes
+      - /users/node_modules
+    healthcheck:
+      test: exit 0
     command: npm install
-
-  volumes:
-    - users: ./services/users

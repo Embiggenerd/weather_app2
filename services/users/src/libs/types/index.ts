@@ -1,12 +1,8 @@
 import { Moment } from 'moment'
-
 import { Request } from 'express'
-
-// import { Headers } from 'http'
 
 export type Token = string 
 
-// interface HeadersWithAuth extends 
 
 export interface RequestWithAuthorization extends Request{
   headers : {

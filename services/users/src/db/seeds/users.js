@@ -9,9 +9,7 @@ exports.seed = function(knex, Promise) {
       const hash = bcrypt.hashSync("lala", salt);
       // Inserts seed entries
       return knex("users").insert([
-        { username: "john", password: hash },
-        { username: "alex", password: hash },
-        { username: "chris", password: hash }
+        { username: "john", password: hash }
       ]);
     })
     .catch(err => console.log(err));

@@ -6,6 +6,7 @@
     "sourceMap": true,
     "types": ["node", "mocha"],
     "strict": true,
+    "rootDir": "src"
   },
 
   "files": [

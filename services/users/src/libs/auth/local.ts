@@ -19,6 +19,7 @@ function encodeToken(user: KnexUser) {
 function decodeToken(token: Token, callback: Function) {
   const payload = jwt.decode(token, secret);
   const now = moment().unix();
+  console.log("payload", payload)
   // check if the token has expired
   if (now > payload.exp) callback("Token has expired.");
   else callback(null, payload);
