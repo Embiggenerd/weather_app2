@@ -8,7 +8,6 @@ module.exports = (req: Request, res: Response, next: NextFunction) => {
   return authHelpers
     .getUser(username)
     .then((response: KnexUser) => {
-      // console.log("getUserRes", response)
       if (!authHelpers.comparePass(password, response.password)) {
         throw new Error("Incorrect password");
       }

@@ -5,19 +5,19 @@ import * as cookieParser from "cookie-parser";
 // hello there
 
 // import { ping } from "./libs/controllers";
-import { Routes } from "./libs/routes"
+import { Routes } from "./libs/routes";
 // import { throws } from "assert";
 // import { ErrorRequestHandler } from "express-serve-static-core";
 
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction } from "express";
 
 interface ErrorWithStatus extends Error {
-  status?: number
+  status?: number;
 }
 
 class App {
-  public express: express.Application
-  public routes: Routes = new Routes()
+  public express: express.Application;
+  public routes: Routes = new Routes();
 
   constructor() {
     this.express = express();
@@ -26,11 +26,11 @@ class App {
     this.configureParsers();
     this.mountRoutes();
     this.setup404();
-    this.setupErrors()
+    this.setupErrors();
   }
 
   private mountRoutes(): void {
-    this.routes.route(this.express)
+    this.routes.route("/users", this.express);
   }
 
   private configureHeaders(): void {
@@ -59,9 +59,7 @@ class App {
   private setup404(): void {
     this.express.use(
       (req: Request, res: Response, next: NextFunction): void => {
-        const err: ErrorWithStatus = new Error(
-          "Not Found"
-        );
+        const err: ErrorWithStatus = new Error("Not Found");
         err.status = 404;
         next(err);
       }
@@ -69,13 +67,20 @@ class App {
   }
 
   private setupErrors(): void {
-    this.express.use((err: ErrorWithStatus, req: Request, res: Response, next: NextFunction): void => {
-      res.status(err.status || 500)
-      res.json({
-        status: "error",
-        message: err
-      })
-    })
+    this.express.use(
+      (
+        err: ErrorWithStatus,
+        req: Request,
+        res: Response,
+        next: NextFunction
+      ): void => {
+        res.status(err.status || 500);
+        res.json({
+          status: "error",
+          message: "error"
+        });
+      }
+    );
   }
 }
 

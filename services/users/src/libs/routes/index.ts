@@ -2,17 +2,16 @@ import { Application } from "express";
 
 import { ping, register, login, user } from "../controllers";
 
-import { authHelpers } from "../auth"
+import { authHelpers } from "../auth";
 
 export class Routes {
-  public route(App: Application): void {
+  public route(pre:string, App: Application): void {
+    App.route(pre + "/ping").get(ping);
 
-    App.route("/ping").get(ping);
+    App.route(pre + "/register").post(register);
 
-    App.route("/users/register").post(register);
+    App.route(pre + "/login").post(login);
 
-    App.route("/users/login").post(login)
-
-    App.route("/users/user").get(authHelpers.ensureAuthenticated, user)
+    App.route(pre + "/user").get(authHelpers.ensureAuthenticated, user);
   }
 }
