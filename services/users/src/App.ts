@@ -2,13 +2,8 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as logger from "morgan";
 import * as cookieParser from "cookie-parser";
-// hello there
 
-// import { ping } from "./libs/controllers";
 import { Routes } from "./libs/routes";
-// import { throws } from "assert";
-// import { ErrorRequestHandler } from "express-serve-static-core";
-
 import { Request, Response, NextFunction } from "express";
 
 interface ErrorWithStatus extends Error {
