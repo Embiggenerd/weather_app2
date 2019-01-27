@@ -7,22 +7,19 @@ import { Routes } from "./libs/routes";
 import { Request, Response, NextFunction } from "express";
 import { ErrorWithStatus } from "./libs/types"
 
+
 class App {
   public express: express.Application;
   public routes: Routes = new Routes();
 
   constructor() {
-    this.express = express();
+    this.express = express()
     this.configureHeaders();
     this.configureLogger();
     this.configureParsers();
     this.mountRoutes();
-    this.setup404();
-    this.setupErrors();
-  }
-
-  private mountRoutes(): void {
-    this.routes.route("/users", this.express);
+    this.setup404()
+    this.setupErrors()
   }
 
   private configureHeaders(): void {
@@ -38,7 +35,7 @@ class App {
 
   private configureLogger(): void {
     if (process.env.NODE_ENV !== "test") {
-      this.express.use(logger("dev"));
+      this.express.use(logger("dev"))
     }
   }
 
@@ -46,6 +43,10 @@ class App {
     this.express.use(bodyParser.json());
     this.express.use(bodyParser.urlencoded({ extended: false }));
     this.express.use(cookieParser());
+  }
+
+  private mountRoutes(): void {
+    this.routes.route("/locations", this.express);
   }
 
   private setup404(): void {
@@ -76,4 +77,4 @@ class App {
   }
 }
 
-export default new App().express;
+export default new App().express

@@ -3,6 +3,9 @@ import { Request } from 'express'
 
 export type Token = string 
 
+export interface ErrorWithStatus extends Error {
+  status?: number;
+}
 
 export interface RequestWithAuthorization extends Request{
   headers : {
