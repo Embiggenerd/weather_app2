@@ -32,4 +32,13 @@ describe('Locations API Routes', () => {
       });
     });
   });
+
+  describe("GET /", () => {
+    it("should return weather data for validated user", (done) => {
+      chai.request(App)
+        .get("/locations/")
+        .set("autherization", "Bearer"  )
+        
+    })
+  })
 });

@@ -5,7 +5,7 @@ import { ping, register, login, user } from "../controllers";
 import { authHelpers } from "../auth";
 
 export class Routes {
-  public route(pre:string, App: Application): void {
+  public route(pre: string, App: Application): void {
     App.route(pre + "/ping").get(ping);
 
     App.route(pre + "/register").post(register);

@@ -15,7 +15,6 @@ describe('routes : index', () => {
       chai.request(App)
       .get('/does/not/exist')
       .end((err: Error, res:ChaiHttp.Response) => {
-        // should.exist(err);
         res.status.should.equal(404);
         res.type.should.equal('application/json');
         done();
