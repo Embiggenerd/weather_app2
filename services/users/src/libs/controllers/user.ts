@@ -3,6 +3,6 @@ import { RequestWithUser} from '../types'
 
 module.exports = (req: RequestWithUser, res: Response) => {
   res.status(200).json({
-    status: "success",
+    message: "success",
     user: req.user
   })}

@@ -30,15 +30,17 @@ function ensureAuthenticated(
   // bearer, token as on the request to this mw
   const options = {
     method: "GET",
-    uri: "http://users-service:3001/users/user",
+    uri: "http://users-service:3000/users/user",
     json: true,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${req.headers.authorization.split(" ")[1]}`
     }
   };
+
   // Send reques to users, which will decode ID from token, and 
   // fetch correct user.
+
   return request(options)
     .then((response: ResponseWithUser) => {
       req.user = response.user;

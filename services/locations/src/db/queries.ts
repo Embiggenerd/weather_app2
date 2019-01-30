@@ -1,5 +1,7 @@
 import knex from './connection'
 
+import { Location } from "../libs/types"
+
 function getAllLocations() {
   return knex('locations').select();
 }
@@ -12,11 +14,11 @@ function getSingleLocation(jobId: string) {
   return knex('locations').select().where('id', jobId);
 }
 
-function addLocation(obj: string) {
+function addLocation(obj: Location) {
   return knex('locations').insert(obj);
 }
 
-function updateLocation(jobId: string, obj: Object) {
+function updateLocation(jobId: string, obj: Location) {
   return knex('locations').update(obj).where('id', jobId);
 }
 

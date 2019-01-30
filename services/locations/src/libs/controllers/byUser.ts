@@ -6,8 +6,9 @@ const { getWeather } = require("../helpers");
 
 module.exports = (req: RequestWithUser, res: Response, next: NextFunction) => {
   let allLocations: LocationsArray = [];
+  console.log("req.user", req.user)
   return queries
-    .getAllLocations()
+    .getAllLocationsByUser(parseInt(req.user, 10))
     .then((locations: LocationsArray) => {
       allLocations = locations;
       return getWeather(allLocations);
