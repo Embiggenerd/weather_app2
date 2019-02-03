@@ -2,11 +2,13 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as logger from "morgan";
 import * as cookieParser from "cookie-parser";
+import * as session from "express-session";
+import * as path from "path";
+import * as nunjucks from "nunjucks";
 
 import { Routes } from "./libs/routes";
 import { Request, Response, NextFunction } from "express";
-import { ErrorWithStatus } from "./libs/types"
-
+import { ErrorWithStatus } from "./types"
 class App {
   public express: express.Application;
   public routes: Routes = new Routes();
@@ -15,14 +17,13 @@ class App {
     this.express = express();
     this.configureHeaders();
     this.configureLogger();
-    this.configureParsers();
     this.mountRoutes();
+    this.setupViewEngine();
+    this.configureParsers();
+    this.configureSession();
+    this.setupServeStatic();
     this.setup404();
     this.setupErrors();
-  }
-
-  private mountRoutes(): void {
-    this.routes.route("/users", this.express);
   }
 
   private configureHeaders(): void {
@@ -42,10 +43,37 @@ class App {
     }
   }
 
+  private mountRoutes(): void {
+    this.routes.route(this.express);
+  }
+
+
   private configureParsers(): void {
     this.express.use(bodyParser.json());
     this.express.use(bodyParser.urlencoded({ extended: false }));
     this.express.use(cookieParser());
+  }
+
+  private configureSession(): void {
+    this.express.use(
+      session({
+        secret: process.env.SECRET_KEY || "secret",
+        resave: false,
+        saveUninitialized: true
+      })
+    );
+  }
+
+  private setupServeStatic(): void {
+    this.express.use(express.static(path.join(__dirname, "..", "src", "public")));
+  }
+
+  private setupViewEngine(): void {
+    nunjucks.configure(path.join(__dirname, "..", "src", 'views'), {
+      express: this.express,
+      autoescape: true,
+    });
+    this.express.set("view engine", "html");
   }
 
   private setup404(): void {
@@ -66,11 +94,14 @@ class App {
         res: Response,
         next: NextFunction
       ): void => {
-        res.status(err.status || 500);
-        res.json({
-          status: "error",
-          message: err
-        });
+        if (!err) return next();
+        const status = err.status || 500;
+        const message = {
+          status,
+          code: err.code,
+          detail: err.message 
+        };
+        return res.status(status).render("error", message);
       }
     );
   }

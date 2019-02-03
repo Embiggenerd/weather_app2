@@ -5,8 +5,9 @@ import { LocationsArray, WeatherArray, RequestWithUser } from "../types";
 const { getWeather } = require("../helpers");
 
 module.exports = (req: RequestWithUser, res: Response, next: NextFunction) => {
+  console.log("allInvoked")
   let allLocations: LocationsArray = [];
-  return queries
+  try {return queries
     .getAllLocations()
     .then((locations: LocationsArray) => {
       allLocations = locations;
@@ -24,6 +25,10 @@ module.exports = (req: RequestWithUser, res: Response, next: NextFunction) => {
       });
     })
     .catch((err: Error) => {
+      console.log("allQueriesErr", err)
       return next(err);
     });
+  } catch(e){
+    console.log("allErr", e)
+  }
 };

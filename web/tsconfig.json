@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "dist",
+    "sourceMap": true,
+    "types": ["node", "mocha"],
+    "strict": true,
+    "rootDir": "src",
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+  },
+
+  "files": [
+    "./node_modules/@types/node/index.d.ts",
+    "./node_modules/@types/mocha/index.d.ts"
+  ],
+  "include": [
+    "src/**/*.ts",
+  ],
+  "exclude": [
+    "node_modules",
+  ]
+  
+}

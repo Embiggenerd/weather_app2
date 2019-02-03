@@ -1,5 +1,6 @@
 import app from "./App";
 
+console.log("locations index invoked")
 class Server {
   public port: string;
 

@@ -61,9 +61,10 @@ function ensureAuthenticated(
         return next();
       })
       .catch((e: Error) => {
-        return res.status(500).json({
-          status: "error"
-        });
+        // return res.status(500).json({
+        //   status: "error"
+        // });
+        return next(err)
       });
 
     return knexUser;

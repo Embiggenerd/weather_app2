@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 
 export interface ErrorWithStatus extends Error {
   status?: number;
@@ -27,13 +27,12 @@ export interface RequestWithUser extends RequestWithAuthorization {
 
 export interface ResponseWithUser extends Response {
   user: string;
-  
 }
 
-export interface ResponseFromUser{
+export interface ResponseFromUser {
   token: string;
-  status: string
-  message: string
+  status: string;
+  message: string;
 }
 
 export interface WeatherResponse {

@@ -32,6 +32,7 @@ services:
     command: tsc --watch
 
   users-service:
+    container_name: users-service
     build: ./services/users
     volumes_from:
       - users-data
@@ -84,6 +85,7 @@ services:
     command: tsc --watch
 
   locations-service:
+    container_name: locations-service
     build: ./services/locations
     volumes_from:
       - locations-data
@@ -105,3 +107,42 @@ services:
       - users-service
     command: nodemon --watch dist
   # End locations segment
+
+  # Begin web segment
+  web-data:
+    build: ./web
+    volumes:
+      - ./web:/web
+      - /web/dist
+      - /web/node_modules
+    healthcheck:
+      test: exit 0
+    command: npm install
+
+  web-transpiler:
+    build: ./web
+    volumes_from:
+      - web-data
+    depends_on:
+      - web-data
+    command: tsc --watch
+
+  web:
+    build: ./web
+    volumes_from:
+      - web-data
+    ports:
+      - "3005:3002"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - TOKEN_SECRET=changeme
+    depends_on:
+      locations-db:
+        condition: service_started
+      users-service:
+        condition: service_started
+    links:
+      - locations-service
+      - users-service
+    command: nodemon --watch dist
+    # End web segment

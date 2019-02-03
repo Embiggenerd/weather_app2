@@ -1,6 +1,5 @@
 process.env.NODE_ENV = "test";
 
-// import request from 'request-promise';
 import * as chai from "chai";
 const should = chai.should();
 import chaiHttp = require("chai-http");
@@ -73,6 +72,7 @@ describe("Locations API Routes", () => {
           res.type.should.eql("application/json");
           done();
         });
+      
     });
 
     it("should return location data for all users", done => {
@@ -81,6 +81,8 @@ describe("Locations API Routes", () => {
         .get("/locations/")
         .set("authorization", "Bearer " + token)
         .end((err, res) => {
+          console.log("locRez", res.body, token)
+
           res.type.should.eql("application/json");
           res.body.status.should.eql("success");
           res.body.data.length.should.eql(2);
@@ -132,6 +134,7 @@ describe("Locations API Routes", () => {
         .get("/locations/user")
         .set("authorization", "Bearer " + token)
         .end((err, res) => {
+          console.log("userLocsRes", res.body)
           res.type.should.eql("application/json");
           res.body.status.should.eql("success");
           res.body.data.length.should.eql(1);

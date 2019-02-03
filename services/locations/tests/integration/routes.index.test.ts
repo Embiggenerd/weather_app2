@@ -1,5 +1,6 @@
 process.env.NODE_ENV = 'test';
 
+import "mocha"
 import chai = require('chai');
 import chaiHttp = require('chai-http');
 const should = chai.should();

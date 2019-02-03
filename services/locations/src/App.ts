@@ -70,7 +70,7 @@ class App {
         res.status(err.status || 500);
         res.json({
           status: "error",
-          message: "error"
+          message: err
         });
       }
     );
