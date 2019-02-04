@@ -14,6 +14,7 @@ module.exports = (req: Request, res: Response, next:NextFunction) => {
   };
   return request(options)
   .then((response: ResponseWithToken) => {
+    console.log("webPostLoginResponse", response)
     if(typeof req.session != "undefined") {
       req.session.token = response.token;
       res.redirect('/');
@@ -21,5 +22,7 @@ module.exports = (req: Request, res: Response, next:NextFunction) => {
     // req.session.token = response.token;
     // res.redirect('/');
   })
-  .catch((err:Error) => { next(err); });
+  .catch((err:Error) => {  
+    console.log("webPostLoginErrCatch", err)
+    next(err); });
 }

@@ -1,3 +1,4 @@
+require("source-map-support").install();
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as logger from "morgan";
@@ -5,7 +6,7 @@ import * as cookieParser from "cookie-parser";
 
 import { Routes } from "./libs/routes";
 import { Request, Response, NextFunction } from "express";
-import { ErrorWithStatus } from "./libs/types"
+import { ErrorWithStatus } from "./libs/types";
 
 class App {
   public express: express.Application;
@@ -66,9 +67,9 @@ class App {
         res: Response,
         next: NextFunction
       ): void => {
-        res.status(err.status || 500);
-        res.json({
-          status: "error",
+        console.log("errrr", err.status);
+        res.status(err.status || 500).json({
+          status: "Error",
           message: err
         });
       }

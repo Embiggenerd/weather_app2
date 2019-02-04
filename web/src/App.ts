@@ -1,3 +1,4 @@
+require('source-map-support').install();
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as logger from "morgan";
@@ -96,13 +97,18 @@ class App {
         res: Response,
         next: NextFunction
       ): void => {
-        if (!err) return next();
+        console.log("webErrorMwInvoked")
+        // if (!err) return next();
+        console.log("errrr2", err)
+        console.log("errrr2.status", err.status)
+
         const status = err.status || 500;
         const message = {
           status,
           code: err.code,
           detail: err.message
         };
+        console.log("mmsg", message)
         return res.status(status).render("error", message);
       }
     );

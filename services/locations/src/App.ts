@@ -1,3 +1,4 @@
+require('source-map-support').install();
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as logger from "morgan";
