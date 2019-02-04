@@ -28,13 +28,14 @@ describe("Locations API Routes", () => {
   });
 
   describe("GET /ping", () => {
-    it('should return "pong"', () => {
+    it('should return "pong"', (done) => {
       chai
         .request(App)
         .get("/locations/ping")
         .end((err, res) => {
           res.type.should.eql("text/html");
           res.text.should.eql("pong");
+          done()
         });
     });
   });

@@ -8,7 +8,8 @@ import * as nunjucks from "nunjucks";
 
 import { Routes } from "./libs/routes";
 import { Request, Response, NextFunction } from "express";
-import { ErrorWithStatus } from "./types"
+import { ErrorWithStatus } from "./types";
+console.log("process.env.SECRET_KEY", process.env.SECRET_KEY);
 class App {
   public express: express.Application;
   public routes: Routes = new Routes();
@@ -17,11 +18,11 @@ class App {
     this.express = express();
     this.configureHeaders();
     this.configureLogger();
-    this.mountRoutes();
     this.setupViewEngine();
     this.configureParsers();
     this.configureSession();
     this.setupServeStatic();
+    this.mountRoutes();
     this.setup404();
     this.setupErrors();
   }
@@ -47,7 +48,6 @@ class App {
     this.routes.route(this.express);
   }
 
-
   private configureParsers(): void {
     this.express.use(bodyParser.json());
     this.express.use(bodyParser.urlencoded({ extended: false }));
@@ -57,7 +57,7 @@ class App {
   private configureSession(): void {
     this.express.use(
       session({
-        secret: process.env.SECRET_KEY || "secret",
+        secret: process.env.SECRET_KEY || "changeme",
         resave: false,
         saveUninitialized: true
       })
@@ -65,13 +65,15 @@ class App {
   }
 
   private setupServeStatic(): void {
-    this.express.use(express.static(path.join(__dirname, "..", "src", "public")));
+    this.express.use(
+      express.static(path.join(__dirname, "..", "src", "public"))
+    );
   }
 
   private setupViewEngine(): void {
-    nunjucks.configure(path.join(__dirname, "..", "src", 'views'), {
+    nunjucks.configure(path.join(__dirname, "..", "src", "views"), {
       express: this.express,
-      autoescape: true,
+      autoescape: true
     });
     this.express.set("view engine", "html");
   }
@@ -99,7 +101,7 @@ class App {
         const message = {
           status,
           code: err.code,
-          detail: err.message 
+          detail: err.message
         };
         return res.status(status).render("error", message);
       }

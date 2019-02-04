@@ -8,8 +8,18 @@ module.exports = (req: Request, res: Response, next: NextFunction) => {
   return authHelpers
     .getUser(username)
     .then((response: KnexUser) => {
+      if (!response) {
+        res.status(400).send({
+          status: 400,
+          message: "No such user"
+        });
+      }
       if (!authHelpers.comparePass(password, response.password)) {
-        throw new Error("Incorrect password");
+        // throw new Error("Incorrect password");
+        res.status(400).send({
+          status: 400,
+          message: "Please try again"
+        });
       }
       return response;
     })
@@ -23,9 +33,10 @@ module.exports = (req: Request, res: Response, next: NextFunction) => {
       });
     })
     .catch((err: Error) => {
-      res.status(500).json({
-        status: "error",
-        message: err
-      });
+      // res.status(500).json({
+      //   status: "error",
+      //   message: err
+      // });
+      next(err);
     });
 };

@@ -19,9 +19,11 @@ module.exports = (req: Request, res: Response, next: NextFunction) => {
   };
   return request(options)
   .then((response: LocationsResponse) => {
+    // console.log("LocationsRequest", response.data)
+
     res.render('main.html', { user, locations: response.data });
   })
   .catch((err: Error) => { 
-    console.log("LocationsRequest", err)
+    // console.log("LocationsRequest", err)
     next(err); });
 } 

@@ -80,9 +80,9 @@ describe("routes: users", () => {
           password: "johnson123"
         })
         .end((err, res) => {
-          res.status.should.eql(500);
+          res.status.should.eql(400);
           res.type.should.eql("application/json");
-          res.body.status.should.eql("error");
+          res.body.message.should.eql("No such user");
           done();
         });
     });
@@ -96,9 +96,9 @@ describe("routes: users", () => {
           password: "incorrect"
         })
         .end((err, res) => {
-          res.status.should.eql(500);
+          res.status.should.eql(400);
           res.type.should.eql("application/json");
-          res.body.status.should.eql("error");
+          res.body.message.should.eql("Please try again");
           done();
         });
     });

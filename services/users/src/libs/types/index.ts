@@ -27,4 +27,5 @@ export interface KnexUser {
   username: string;
   password: string;
   id: string;
+  length: number;
 }

@@ -28,3 +28,7 @@ export interface LocationsArray extends Array<Location> {}
 export interface LocationsResponse{
   data: LocationsArray
 }
+
+export interface ResponseWithToken extends Response {
+  token: string
+}

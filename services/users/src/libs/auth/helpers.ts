@@ -24,7 +24,12 @@ function getUser(username: string): KnexUser {
   let user;
   user = knex("users")
     .where({ username })
-    .first();
+    .then((users:any) => {
+      return users[0]
+    })
+    // .first()
+    
+  // console.log("ifUserFound:", user.length)
   return user;
 }
 
