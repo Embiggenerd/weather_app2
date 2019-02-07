@@ -3,7 +3,8 @@ const request = require("request-promise")
 
 
 module.exports = (req:Request, res:Response, next:NextFunction) => {
-  const token = typeof request.session === "undefined" ? null : request.session.token
+  const token = typeof req.session === "undefined" ? null : req.session.token
+  console.log("weAddReq.session", req.session)
   
   const payload = {
     lat: req.body.latitude,
