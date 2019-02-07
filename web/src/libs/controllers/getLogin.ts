@@ -5,5 +5,5 @@ module.exports = (req: Request, res: Response, next: NextFunction) => {
   if (typeof req.session != "undefined" && req.session.token) {
     user = true;
   }
-  res.render("login.html", { user });
+  return res.render("login.html", { user });
 };

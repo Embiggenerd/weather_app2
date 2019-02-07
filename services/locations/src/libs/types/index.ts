@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express";
 
 export interface ErrorWithStatus extends Error {
   status?: number;
+  httpStatusCode?:number;
+  detail?:string;
 }
 
 export interface Location {

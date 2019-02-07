@@ -53,7 +53,7 @@ class App {
     this.express.use(
       (req: Request, res: Response, next: NextFunction): void => {
         const err: ErrorWithStatus = new Error("Not Found");
-        err.status = 404;
+        err.httpStatusCode = 404;
         next(err);
       }
     );
@@ -67,10 +67,9 @@ class App {
         res: Response,
         next: NextFunction
       ): void => {
-        console.log("errrr", err.status);
-        res.status(err.status || 500).json({
-          status: "Error",
-          message: err
+        res.status(err.httpStatusCode || 500).json({
+          msg: err.message,
+          detail: err.detail
         });
       }
     );

@@ -27,9 +27,7 @@ function getUser(username: string): KnexUser {
     .then((users:any) => {
       return users[0]
     })
-    // .first()
     
-  // console.log("ifUserFound:", user.length)
   return user;
 }
 
@@ -50,8 +48,15 @@ function ensureAuthenticated(
 
   const header = req.headers.authorization.split(" ");
   const token = header[1];
+  console.log("usersAuthReq", header)
+
+  console.log("usersAuthHeader", header)
+  console.log("usersAuthToken", token)
+
+
   decodeToken(token, (err: Error, payload: TokenData) => {
     if (err) {
+      console.log("usersAuthErr2", err)
       return res.status(401).json({
         status: "Token has expired"
       });
@@ -66,9 +71,7 @@ function ensureAuthenticated(
         return next();
       })
       .catch((e: Error) => {
-        // return res.status(500).json({
-        //   status: "error"
-        // });
+        console.log("usersAuthErr", e)
         return next(err)
       });
 

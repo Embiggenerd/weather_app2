@@ -5,9 +5,7 @@ const KEY = process.env.OPENWEATHERMAP_API_KEY;
 
 import { LocationsArray, RequestWithUser, ResponseWithUser } from "../types";
 import { Response, NextFunction } from "express";
-console.log("process.env.OPENWEATHERMAP_API_KEY", process.env.OPENWEATHERMAP_API_KEY)
 function getWeather(locationsArray: LocationsArray) {
-  console.log("apikey", KEY)
   try {
     const data = locationsArray.map(location => {
       const options = {
@@ -29,12 +27,15 @@ function ensureAuthenticated(
   res: Response,
   next: NextFunction
 ) {
+  console.log("locAuthReq.headers", req.headers)
+
   if (!(req.headers && req.headers.authorization)) {
     return res.status(400).json({ status: "Please log in" });
   }
+  
   // Place a header on request to users with same autherization
   // bearer, token as on the request to this mw
-  try {
+  // try {
     const options = {
       method: "GET",
       uri: "http://users-service:3000/users/user",
@@ -46,6 +47,7 @@ function ensureAuthenticated(
     };
     return request(options)
     .then((response: ResponseWithUser) => {
+      console.log("response.user", response.user)
       req.user = response.user;
       return next();
     })
@@ -53,9 +55,9 @@ function ensureAuthenticated(
       console.log("locAuthErr2", err)
       return next(err);
     });
-  }catch(e){
-    console.log("locAuthErr", e)
-  }
+  // }catch(e){
+  //   console.log("locAuthErr", e)
+  // }
   
 
   // Send reques to users, which will decode ID from token, and 

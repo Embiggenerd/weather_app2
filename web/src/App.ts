@@ -1,4 +1,4 @@
-require('source-map-support').install();
+require("source-map-support").install();
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as logger from "morgan";
@@ -10,7 +10,6 @@ import * as nunjucks from "nunjucks";
 import { Routes } from "./libs/routes";
 import { Request, Response, NextFunction } from "express";
 import { ErrorWithStatus } from "./types";
-console.log("process.env.SECRET_KEY", process.env.SECRET_KEY);
 class App {
   public express: express.Application;
   public routes: Routes = new Routes();
@@ -74,16 +73,20 @@ class App {
   private setupViewEngine(): void {
     nunjucks.configure(path.join(__dirname, "..", "src", "views"), {
       express: this.express,
-      autoescape: true
+      autoescape: true,
+      noCache: false,
+      watch: true
     });
     this.express.set("view engine", "html");
   }
 
   private setup404(): void {
+    console.log("setup404 invoked");
     this.express.use(
       (req: Request, res: Response, next: NextFunction): void => {
         const err: ErrorWithStatus = new Error("Not Found");
-        err.status = 404;
+        err.statusCode = 404;
+        err.detail = err.toString();
         next(err);
       }
     );
@@ -97,18 +100,13 @@ class App {
         res: Response,
         next: NextFunction
       ): void => {
-        console.log("webErrorMwInvoked")
-        // if (!err) return next();
-        console.log("errrr2", err)
-        console.log("errrr2.status", err.status)
-
-        const status = err.status || 500;
+        const detail =
+          typeof err.error === "undefined" ? err.detail : err.error.detail;
+        const status = err.statusCode || 500;
         const message = {
           status,
-          code: err.code,
-          detail: err.message
+          detail: detail
         };
-        console.log("mmsg", message)
         return res.status(status).render("error", message);
       }
     );

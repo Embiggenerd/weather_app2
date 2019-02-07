@@ -5,6 +5,8 @@ export type Token = string;
 
 export interface ErrorWithStatus extends Error {
   status?: number;
+  httpStatusCode?: number;
+  detail?: string;
 }
 
 export interface RequestWithAuthorization extends Request {

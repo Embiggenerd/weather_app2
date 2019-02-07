@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { KnexUser, Token } from "../types";
+import { KnexUser, Token, ErrorWithStatus } from "../types";
 import { authHelpers, localAuth } from "../auth";
 
 module.exports = (req: Request, res: Response, next: NextFunction) => {
@@ -9,24 +9,16 @@ module.exports = (req: Request, res: Response, next: NextFunction) => {
     .getUser(username)
     .then((response: KnexUser) => {
       if (!response) {
-        throw new Error("No such users")
-        // return res.status(400).send({
-        //   from:"users-service",
-        //   status: 400,
-        //   message: "No such user"
-        // });
-        // return next(
-        //   // {code:400, status:400, message: "No such user"}
-        //   "No such user"
-        // );
+        const noUser: ErrorWithStatus = new Error("No such user")
+        noUser.detail = noUser.toString()
+        noUser.httpStatusCode = 400
+        throw noUser
       }
       if (!authHelpers.comparePass(password, response.password)) {
-        // throw new Error("Incorrect password");
-        res.status(400).send({
-          from:"users-service",
-          status: 400,
-          message: "Please try again"
-        });
+        const wrongPass: ErrorWithStatus = new Error("Incorrect password");
+        wrongPass.detail = wrongPass.toString()
+        wrongPass.httpStatusCode = 400
+        throw wrongPass
       }
       return response;
     })
@@ -40,11 +32,6 @@ module.exports = (req: Request, res: Response, next: NextFunction) => {
       });
     })
     .catch((err: Error) => {
-      res.status(500).json({
-        status: "error",
-        message: err
-      });
-      
       next(err);
     });
 };

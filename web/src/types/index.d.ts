@@ -1,15 +1,21 @@
 export interface ErrorWithStatus extends Error {
-  status?: number;
+  statusCode?: number;
+  httpStatusCode?: number;
+  error?: any;
   err?: {
-    message: string
-  }
+    message: string;
+  };
   code?: string;
+  details?: string;
+  body?: any;
+  detail?: string
+
 }
 
-export interface ResponseFromUser{
+export interface ResponseFromUser {
   token: string;
-  status: string
-  message: string
+  status: string;
+  message: string;
 }
 
 export interface ResponseWithUser extends Response {
@@ -25,10 +31,10 @@ export interface Location {
 
 export interface LocationsArray extends Array<Location> {}
 
-export interface LocationsResponse{
-  data: LocationsArray
+export interface LocationsResponse {
+  data: LocationsArray;
 }
 
 export interface ResponseWithToken extends Response {
-  token: string
+  token: string;
 }

@@ -1,6 +1,5 @@
 import app from "./App";
 
-console.log("users index invoked")
 class Server {
   public port: string;
 
