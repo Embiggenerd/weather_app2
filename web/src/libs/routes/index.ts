@@ -26,7 +26,7 @@ export class Routes {
 
     App.route("/register").get(loginRedirect, getRegister)
 
-    App.route("register").post(postRegister)
+    App.route("/register").post(postRegister)
 
     App.route("/logout").get(ensureAuthenticated, logout)
 

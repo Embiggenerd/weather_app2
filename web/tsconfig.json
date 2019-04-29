@@ -7,8 +7,6 @@
     "types": ["node", "mocha"],
     "strict": true,
     "rootDir": "src",
-    "noImplicitReturns": true,
-    "noImplicitAny": true,
   },
 
   "files": [

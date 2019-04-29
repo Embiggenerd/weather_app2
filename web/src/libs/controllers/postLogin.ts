@@ -22,7 +22,7 @@ module.exports = (req: Request, res: Response, next: NextFunction) => {
       
     })
     .catch((err: Error) => {
-      console.log("webPostLoginErrCatch", err);
+      // console.log("webPostLoginErrCatch", err);
       return next(err);
     });
 };

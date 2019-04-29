@@ -15,12 +15,14 @@ module.exports = (req: Request, res: Response, next: NextFunction) => {
   };
   return request(options)
     .then((response: ResponseWithToken) => {
+      console.log("webPostRegResFromUsers", response)
       if (typeof req.session != "undefined") {
         req.session.token = response.token;
         res.redirect("/");
       }
     })
     .catch((err: Error) => {
+      console.log("webPostRegisterErrCatch", err)
       next(err);
     });
 };

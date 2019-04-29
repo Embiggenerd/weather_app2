@@ -1,4 +1,6 @@
 process.env.NODE_ENV = "test";
+const crypto = require("crypto");
+
 
 const request = require("request-promise");
 import "mocha";
@@ -10,29 +12,6 @@ chai.use(chaiHttp);
 import App from "../../src/App";
 import { ResponseWithUser, ResponseFromUser } from "../../src/types";
 describe("Web API Routes", () => {
-  // let token: String;
-
-  // before("get token from users", done => {
-  //   const options = {
-  //     method: "POST",
-  //     uri: "http://users-service:3000/users/login",
-  //     json: true,
-  //     body: {
-  //       username: "john",
-  //       password: "lala"
-  //     }
-  //   };
-
-  //   request(options)
-  //     .then((res: ResponseFromUser) => {
-  //       token = res.token;
-  //       done();
-  //     })
-  //     .catch((err: Error) => {
-  //       console.log("usersResErr:", err);
-  //     });
-  // });
-
   describe("GET /ping", () => {
     it("Returns a pong", done => {
       chai
@@ -72,15 +51,96 @@ describe("Web API Routes", () => {
   describe("POST /login", () => {
     const agent = chai.request.agent(App);
 
-    it("Reponds with error to wrong password", done => {
+    it("Reponds with appropriate error to wrong password", done => {
       agent
         .post("/login")
         .send({ username: "john", password: "wrong password" })
         .end((err, res) => {
-          console.log("loginError",res.text)
-          res.text.should.contain("Please try again")
-          done()
-        })
+          res.text.should.contain("Error: Incorrect password");
+          done();
+        });
+    });
+    it("Responds with appropriate error to unregistered user", done => {
+      agent
+        .post("/login")
+        .send({ username: "juan", password: "lolo" })
+        .end((err, res) => {
+          res.text.should.contain("Error: No such user");
+          done();
+        });
+    });
+    it("Responds with locations page to registered user", done => {
+      agent
+        .post("/login")
+        .send({ username: "john", password: "lala" })
+        .end((err, res) => {
+          // console.log("webLoginResRes", res.text)
+
+          res.text.should.contain("<h1>Locations</h1>");
+          done();
+        });
     });
   });
+  describe("GET /register", () => {
+    const agent = chai.request.agent(App);
+
+    it("Displays registration page to users not logged in", done => {
+      agent.get("/register").end((err, res) => {
+        res.text.should.contain("<h1>Register</h1>");
+        done();
+      });
+    });
+    it("Should not display registration page to logged in users", done => {
+      agent
+        .post("/login")
+        .send({ username: "john", password: "lala" })
+        .end(() => {
+          agent.get("/register").end((err, res) => {
+            res.text.should.contain("<h1>Locations</h1>");
+            res.text.should.not.contain("<h1>Register</h1>");
+            done();
+          });
+        });
+    });
+  });
+  describe("POST /register", () => {
+    const agent = chai.request.agent(App);
+    const username = crypto.randomBytes(20).toString('hex');
+
+    it("Should display appropriate error when username is not available", done => {
+      chai
+        .request(App)
+        .post("/register")
+        .send({ username: "john", password: "lala" })
+        .end((err, res) => {
+          res.text.should.contain("<p>Username not available</p>");
+          done();
+        });
+    });
+    it("Should show locations if registered with unique username", done => {
+      agent
+        .post("/register")
+        .send({ username, password: "bag" })
+        .end((err, res) => {
+          res.text.should.contain("<h1>Locations</h1>");
+          done();
+        });
+    });
+  });
+  describe("GET /logout", () => {
+    const agent = chai.request.agent(App);
+    it("Should logout a logged in user", done => {
+      agent
+        .post("/login")
+        .send({ username: "john", password: "lala" })
+        .end((err, res) => {
+          res.text.should.contain("<h1>Locations</h1>");
+          agent.get("/logout").end((err, res) => {
+            res.text.should.not.contain("<h1>Locations</h1>");
+            done()
+          });
+        });
+    });
+  });
+  
 });

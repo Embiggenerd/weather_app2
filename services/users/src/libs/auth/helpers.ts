@@ -11,13 +11,17 @@ function createUser(req: Request): KnexUser {
 
   const salt = bcrypt.genSaltSync();
   const hash = bcrypt.hashSync(req.body.password, salt);
-  user = knex("users")
+  return knex("users")
     .insert({
       username: req.body.username,
       password: hash
     })
-    .returning("*");
-  return user;
+    .returning("*")
+    .then((user: any) =>{
+      console.log("usesRegisterUserLookup", user)
+      return user
+    })
+  // console.log("uzer", user)
 }
 
 function getUser(username: string): KnexUser {
@@ -48,15 +52,15 @@ function ensureAuthenticated(
 
   const header = req.headers.authorization.split(" ");
   const token = header[1];
-  console.log("usersAuthReq", header)
+  // console.log("usersAuthReq", header)
 
-  console.log("usersAuthHeader", header)
-  console.log("usersAuthToken", token)
+  // console.log("usersAuthHeader", header)
+  // console.log("usersAuthToken", token)
 
 
   decodeToken(token, (err: Error, payload: TokenData) => {
     if (err) {
-      console.log("usersAuthErr2", err)
+      // console.log("usersAuthErr2", err)
       return res.status(401).json({
         status: "Token has expired"
       });
@@ -71,7 +75,7 @@ function ensureAuthenticated(
         return next();
       })
       .catch((e: Error) => {
-        console.log("usersAuthErr", e)
+        // console.log("usersAuthErr", e)
         return next(err)
       });
 

@@ -67,6 +67,7 @@ class App {
         res: Response,
         next: NextFunction
       ): void => {
+        console.log("usersError", err)
         res.status(err.httpStatusCode || 500).json({
           msg: err.message,
           detail: err.detail

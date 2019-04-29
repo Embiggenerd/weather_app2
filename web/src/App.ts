@@ -84,6 +84,7 @@ class App {
     console.log("setup404 invoked");
     this.express.use(
       (req: Request, res: Response, next: NextFunction): void => {
+        console.log("webSetup404Error")
         const err: ErrorWithStatus = new Error("Not Found");
         err.statusCode = 404;
         err.detail = err.toString();
@@ -100,6 +101,8 @@ class App {
         res: Response,
         next: NextFunction
       ): void => {
+        console.log("webError", err)
+
         const detail =
           typeof err.error === "undefined" ? err.detail : err.error.detail;
         const status = err.statusCode || 500;

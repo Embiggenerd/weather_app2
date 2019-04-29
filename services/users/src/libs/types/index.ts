@@ -31,3 +31,8 @@ export interface KnexUser {
   id: string;
   length: number;
 }
+
+export interface ErrorFromKnex extends ErrorWithStatus{
+  constraint?:string;
+  
+}
